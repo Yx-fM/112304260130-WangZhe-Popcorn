@@ -33,7 +33,7 @@
 - **竞赛链接**: https://www.kaggle.com/competitions/word2vec-nlp-tutorial
 - **提交文件**: `submissions/part4_fused_final.csv`
 
-- **GitHub 仓库地址**: https://github.com/wangzhe-ml/112304260130-WangZhe-Popcorn
+- **GitHub 仓库地址**: https://github.com/Yx-fM/112304260130-WangZhe-Popcorn
 - **最佳提交文件**: `submissions/best_ensemble.csv` (Kaggle: 0.96854)
 
 ---
