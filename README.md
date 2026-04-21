@@ -33,31 +33,61 @@
 - **竞赛链接**: https://www.kaggle.com/competitions/word2vec-nlp-tutorial
 - **提交文件**: `submissions/part4_fused_final.csv`
 
-- **GitHub 仓库地址**: https://github.com/你的用户名/112304260130-WangZhe-Popcorn
+- **GitHub 仓库地址**: https://github.com/wangzhe-ml/112304260130-WangZhe-Popcorn
+- **最佳提交文件**: `submissions/best_ensemble.csv` (Kaggle: 0.96854)
 
 ---
 
 ## 4. Kaggle 成绩
 
-请填写你提交到 Kaggle 的成绩：
+最终提交成绩：
 
-- **Public Score**: 0.XXXX
-- **Private Score**: 0.XXXX（可选）
-- **排名**: （可选，如果排名很靠前可以填写）
+- **Best Public Score**: **0.96854** (ensemble)
+- **Public Score**: 0.96828 (ultra single model)
 
 ### 各方法成绩对比
 
-| 方法 | 验证集准确率 | Kaggle Public Score |
-|------|-------------|---------------------|
-| Part 1 (BoW Baseline) | ~86-87% | 待填写 |
+| 方法 | CV AUC | Kaggle Public Score |
+|------|--------|---------------------|
+| TF-IDF + LR (Ultra) | 0.9688 | 0.96828 |
+| **Ensemble (4-model)** | - | **0.96854** ✅ |
+| Part 1 (BoW Baseline) | ~86-87% | - |
 | Part 3 (Word2Vec + RF) | ~88-89% | 0.86680 |
 | Part 4 (特征融合+XGBoost) | CV AUC ~0.90-0.93 | 0.87948 |
 
+### 关键发现
+
+1. **简单模型有效**: TF-IDF + Logistic Regression 达到 0.968+
+2. **集成提升**: 4模型集成比单模型提升 +0.00026
+3. **预处理关键**: 保留否定词 (not, no, never) 是关键
+4. **N-grams 重要**: 使用 1-6 grams 捕获短语模式
+
 ---
 
-## 5. 实验方法
+## 5. 实验方法（最终优化版）
 
-### Part 1: Bag of Words 基线
+### 最终方案：TF-IDF + Logistic Regression Ensemble
+
+经过大量实验，发现简单模型在此任务上表现最佳：
+
+**核心方法**:
+- TF-IDF 特征提取 (ngrams 1-6, 150k features)
+- Logistic Regression (C=10-50)
+- 4模型集成 + TJflexic 后处理
+
+**关键预处理**:
+- 保留否定词: not, no, never, nor, neither, hardly, barely
+- 扩展缩写: don't → do not
+- 移除 HTML 标签和 URL
+- 移除极常见停用词 (the, a, an)
+
+**为什么简单模型分数高**:
+1. 更少过拟合 - LR 参数少，泛化能力强
+2. 更鲁棒 - 对噪声和异常值稳定
+3. 特征直接 - TF-IDF 直接反映词频信号
+4. 调参简单 - 主要参数 C 和 ngram_range
+
+### 原始 Part 1: Bag of Words 基线
 
 使用词袋模型 + 随机森林建立基线。
 
@@ -154,6 +184,10 @@ jupyter notebook
 ├── README.md                    # 实验报告
 ├── requirements.txt             # 依赖列表
 ├── QUICKSTART.md                # 快速开始指南
+├── PROJECT_SUMMARY.md           # 项目总结
+├── run_final_revised.py         # 最终优化脚本
+├── revised_part1_lr_ngrams.py   # Part 1 改进版
+├── revised_part3_w2v_lr.py      # Part 3 改进版
 ├── run_part3.py                 # Part 3 运行脚本
 ├── run_part3_gpu.py             # GPU 加速版本
 ├── run_part4_final.py           # Part 4 最终版本
@@ -176,6 +210,8 @@ jupyter notebook
 ├── models/                      # 训练好的模型
 │   └── word2vec_model.bin
 └── submissions/                 # Kaggle 提交文件
+    ├── best_ensemble.csv        # 最佳提交 (0.96854)
+    ├── best_ultra.csv           # 单模型 (0.96828)
     ├── bow_*.csv
     ├── word2vec_xgb_*.csv
     └── part4_fused_*.csv
