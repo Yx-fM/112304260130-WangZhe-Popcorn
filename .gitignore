@@ -45,8 +45,9 @@ models/*.pkl
 models/*.h5
 models/*.hdf5
 
-# Submissions (can be regenerated)
+# Submissions (keep best results, ignore others)
 submissions/*.csv
+!submissions/best_*.csv
 
 # Logs
 *.log

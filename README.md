@@ -62,6 +62,10 @@
 3. **预处理关键**: 保留否定词 (not, no, never) 是关键
 4. **N-grams 重要**: 使用 1-6 grams 捕获短语模式
 
+### Kaggle 提交截图
+
+![Kaggle成绩截图](./images/kaggle_score.png)
+
 ---
 
 ## 5. 实验方法（最终优化版）
